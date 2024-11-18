@@ -7,13 +7,16 @@ interface Blog {
     id: string;
     title: string;
     content: string;
+    authorId: string;
     author: {
         name: string;
     };
+    
+    publishedDate: string;
 }
 
 export const Myaccount = () => {
-    const { blogs, loading } = useMyblogs();
+    const { blogs=[], loading } = useMyblogs();
     const navigate = useNavigate();
 
     const handlelogout = () => {

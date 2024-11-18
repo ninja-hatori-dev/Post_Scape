@@ -5,12 +5,15 @@ import axios from "axios";
 
 
 export interface Blog {
+    authorId: string;
     content: string;
     title: string;
     id: string;
     author: {
         name: string;
     }
+    publishedDate?: string;
+    
 }
  
 
