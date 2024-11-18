@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useUserDetails } from "../hooks";
 import { useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../confi";
+
 
 interface BlogcardProps {
     authorName: string;
@@ -26,7 +26,7 @@ export const Blogcard = ({
 
     const handleDelete = async (blogId: string) => {
         try {
-            await axios.delete(`${BACKEND_URL}/api/v1/blog/${blogId}`, {
+            await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/blog/${blogId}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1")}`
                 }

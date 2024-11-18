@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link , useNavigate} from "react-router-dom"
 import { ChangeEvent } from 'react';
 import axios from "axios"
-import { BACKEND_URL } from "../confi";
+
 
 
 export const Auth = ({type}:{type: "signup" | "signin"})=>{
@@ -19,7 +19,7 @@ export const Auth = ({type}:{type: "signup" | "signin"})=>{
     async function sendRequest() {
         try {
             const res = await axios.post(
-                `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, 
+                `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, 
                 postInputs
             );
             const jwt = res.data.jwt;

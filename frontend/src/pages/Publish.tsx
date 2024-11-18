@@ -1,12 +1,13 @@
 import { Appbar } from "../components/Appbar";
 import axios from "axios";
-import { ApiKeyGemini, BACKEND_URL } from "../confi";
+
 import { useState } from "react";
 
-//import LlamaAI from 'llamaai';
+//import * as LlamaAI from 'llamaai';
 
 import { useNavigate } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
 
 export const Publish = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +15,49 @@ export const Publish = () => {
   const [loading, setLoading] = useState(false);
   const [loadcheck , setLoadcheck] = useState(false);
   const navigate = useNavigate();
+
+  
+// const handleLlama = async () => {
+//   if (!title) {
+//     alert("Please provide a title before generating content.");
+//     return;
+//   }
+
+//   setLoading(true);
+
+//   // Assuming ApiKeyLlama is your API key for Llama AI
+//   const llamaAPI = new LlamaAI({ apiKey: import.meta.env.VITE_ApiKeyLlama });
+
+//     console.log("Llama API Key:", import.meta.env.ApiKeyLlama);
+
+//   const request = {
+//     messages: [
+//       {
+//         role: "user",
+//         content: `Write an article about the following topic: ${title}`,
+//       },
+//     ],
+//     stream: false,
+//   };
+
+//   try {
+//     const response = await llamaAPI.run(request);  // Assuming `run` is the method to call the API
+//     const gptContent = response.choices[0].message.content;  // Adjust based on Llama API's response structure
+//     setContent(gptContent.trim());
+//   } catch (error : any) {
+//     if (error.response) {
+//       console.error("API Error Response:", error.response.data);
+//       alert(`Error: ${error.response.data.message}`);
+//     } else {
+//       console.error("Unknown Error:", error.message || error);
+//       alert("Unexpected error occurred.");
+//     }
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+
+   
 
   const handlePublish = async () => {
     try {
@@ -24,8 +68,9 @@ export const Publish = () => {
         return;
       }
 
+
       const res = await axios.post(
-        `${BACKEND_URL}/api/v1/blog/add`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/blog/add`,
         { title, content },
         {
           headers: {
@@ -50,7 +95,13 @@ export const Publish = () => {
 
     setLoading(true);
 
-    const genAI = new GoogleGenerativeAI(`${ApiKeyGemini}`); // Initialize with environment variable
+    const api_key = import.meta.env.VITE_ApiKeyGemini;
+
+    if(!api_key){
+      alert("api key not found");
+      return ;
+    }
+    const genAI = new GoogleGenerativeAI(api_key ); // Initialize with environment variable
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -75,10 +126,10 @@ export const Publish = () => {
       alert("Please provide content before checking error.");
       return;
     }
-
+    const api_key = import.meta.env.VITE_ApiKeyGemini;
     setLoadcheck(true);
   try{
-    const genAI = new GoogleGenerativeAI(`${ApiKeyGemini}`);
+    const genAI = new GoogleGenerativeAI(api_key);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   
   const result =  await model.generateContent(`correct grammatical errors ${content}`);
