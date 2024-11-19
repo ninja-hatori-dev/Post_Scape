@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+const api_back = import.meta.env.VITE_BACKEND_URL;
 
 export const Publish = () => {
   const [title, setTitle] = useState("");
@@ -70,7 +71,7 @@ export const Publish = () => {
 
 
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/blog/add`,
+        `${api_back}/api/v1/blog/add`,
         { title, content },
         {
           headers: {

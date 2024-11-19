@@ -15,15 +15,15 @@ export const Auth = ({type}:{type: "signup" | "signin"})=>{
         password: ""
        
     })
-
+ const api = import.meta.env.VITE_BACKEND_URL;
     async function sendRequest() {
         try {
             const res = await axios.post(
-                `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, 
+                `${api}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, 
                 postInputs
             );
             const jwt = res.data.jwt;
-            
+            console.log(api);
             localStorage.setItem("token", JSON.stringify(jwt));
             navigate("/blogs");
             

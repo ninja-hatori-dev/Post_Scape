@@ -16,7 +16,7 @@ export interface Blog {
     
 }
  
-
+export const api_back = import.meta.env.VITE_BACKEND_URL;
 export const useBlog = ( {id}: {id: string})=>{
 
     const [blog, setBlog] = useState<Blog>();
@@ -25,7 +25,7 @@ export const useBlog = ( {id}: {id: string})=>{
     useEffect(() => {
       
 
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/blog/${id}`, {
+        axios.get(`${api_back}/api/v1/blog/${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1")}`
             }
@@ -57,7 +57,7 @@ export const useBlogs = () => {
     useEffect(() => {
       
 
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/blog/bulk`, {
+        axios.get(`${api_back}/api/v1/blog/bulk`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1")}`
             }
@@ -106,7 +106,7 @@ export const useMyblogs = () =>{
 
 
     useEffect(()=>{
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/blog/myaccount/${data.id}`, {
+        axios.get(`${api_back}/api/v1/blog/myaccount/${data.id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")?.replace(/^"(.*)"$/, "$1")}`,
                 },
