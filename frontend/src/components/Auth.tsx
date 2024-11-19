@@ -18,13 +18,13 @@ export const Auth = ({type}:{type: "signup" | "signin"})=>{
  const api = import.meta.env.VITE_BACKEND_URL;
     async function sendRequest() {
         try {
+            console.log(api);
             const res = await axios.post(
                 `${api}/api/v1/user/${type === "signup" ? "signup" : "signin"}`, 
                 postInputs
             );
             const jwt = res.data.jwt;
-            console.log(api);
-            localStorage.setItem("token", JSON.stringify(jwt));
+                      localStorage.setItem("token", JSON.stringify(jwt));
             navigate("/blogs");
             
         } catch (e) {
