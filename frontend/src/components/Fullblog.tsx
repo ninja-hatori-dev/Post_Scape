@@ -20,7 +20,7 @@ export const Fullblog = ({ blog }:{ blog : Blog}) => {
                           {blog.title}
                       </div>
                       <div className="text-slate-400 pt-5">
-                          Posted on {blog.publishedDate || "Nov 07, 2024"}
+                          Posted on {blog.publishedDate}
                       </div>
                       <div className=" flex justify-center items-center text-lg pt-10">
                           {blog.content}

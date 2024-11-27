@@ -3,6 +3,7 @@ import { Blogcard } from "../components/Blogcard"
 import { useBlogs} from "../hooks"
 export const Blogs = () =>{
    const {blogs,loading} = useBlogs();
+   
 
    if(loading){
     return <div className="flex justify-center items-center h-screen w-screen">

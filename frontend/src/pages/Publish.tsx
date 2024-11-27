@@ -69,7 +69,7 @@ export const Publish = () => {
         return;
       }
 
-
+      
       const res = await axios.post(
         `${api_back}/api/v1/blog/add`,
         { title, content },
@@ -103,6 +103,7 @@ export const Publish = () => {
       return ;
     }
     const genAI = new GoogleGenerativeAI(api_key ); // Initialize with environment variable
+    
     try {
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 

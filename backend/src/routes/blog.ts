@@ -13,23 +13,31 @@ export const blogRouter = new Hono<{
         userId: string
     }
 }>();
+ 
 
-blogRouter.use('/*',async (c, next) => {
+
+blogRouter.use('/*', async (c, next) => {
     const jwt = c.req.header('Authorization');
-     
-	if (!jwt) {
-		c.status(401);
-		return c.json({ error: "unauthorized" });
-	}
-	const token = jwt.split(" ")[1];
-	const payload = await verify(token, c.env.JWT_SECRET);
-	if (!payload) {
-		c.status(401);
-		return c.json({ error: "unauthorized" });
-	}
-	c.set('userId', payload.id as string);
-	await next()
+
+    if (!jwt) {
+        return c.json({ error: "Unauthorized" }, 401); // Return immediately
+    }
+
+    const token = jwt.split(" ")[1];
+    try {
+        const payload = await verify(token, c.env.JWT_SECRET);
+        if (!payload) {
+            return c.json({ error: "Unauthorized" }, 401);
+        }
+        c.set('userId', payload.id as string);
+		console.log("Extracted userId in middleware:", c.get('userId'));
+        await next(); // Continue to the next handler
+    } catch (e : any) {
+        console.error("JWT verification error:", e.message);
+        return c.json({ error: "Unauthorized" }, 401);
+    }
 });
+
 
 
 
@@ -40,8 +48,29 @@ blogRouter.post('/add', async (c) => {
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());
+
     try{
+        const options: Intl.DateTimeFormatOptions = {
+			timeZone: 'Asia/Kolkata',
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: true,
+			month: 'short', // "short" is valid for month
+			day: '2-digit', // "2-digit" is valid for day
+			year: 'numeric', // "numeric" is valid for year
+		  };
+		  
+		  const now = new Date();
+		  const indiaTime = now.toLocaleString('en-IN', options);
+    
+    // Split the date and time
+    const [time, date] = indiaTime.split(', ');
+
+    // Combine everything into the final format
+    const finalOutput = `${time}, ${date.toUpperCase()}`;
+
         const body = await c.req.json();
+		console.log(body);
         const { success } = createBlogInput.safeParse(body);
         if(! success){
             c.status(411);
@@ -49,23 +78,24 @@ blogRouter.post('/add', async (c) => {
                 message : "inputs syntax are incorrect"
             })
         }
+		console.log(body.title,body.content,userId,finalOutput);
         const post = await prisma.post.create({
             data: {
                 title: body.title,
                 content: body.content,
-                authorId: userId
+                authorId: userId,
+				publishedDate: finalOutput
             }
         });
 		
-		console.log("koi dikkat nhi");
         return c.json({
             id: post.id
         });
 
 		
     }
-	catch(e){
-        console.log(e);
+	catch(e : any){
+		console.error("Error in /add route:", e.message, e.stack);
     }
 })
 
@@ -119,6 +149,7 @@ blogRouter.get('/bulk', async (c) => {
 			title: true,
 			id: true, 
 			authorId: true,
+			publishedDate: true,
 			author: {
 			   select:{
 			   name: true
@@ -126,6 +157,7 @@ blogRouter.get('/bulk', async (c) => {
 			}
 		}
 	}});
+	
 
 	return c.json(post);
    }
@@ -152,6 +184,7 @@ blogRouter.get('/:id', async (c) => {
             title:true,
             content:true,
 			authorId: true,
+			publishedDate: true,
             author:{
                 select:{
                     name:true
@@ -213,6 +246,7 @@ blogRouter.get("/myaccount/:authorId", async(c)=>{
 			  title: true,
 			  id: true,
 			  authorId: true,
+			  publishedDate: true,
 			  author: {
 				 select: {
 					name: true,
@@ -222,6 +256,8 @@ blogRouter.get("/myaccount/:authorId", async(c)=>{
 		});
   
 		// Return the posts as a JSON response
+
+		
 		return c.json(posts);
 	 } catch (e) {
 		console.error(e);
