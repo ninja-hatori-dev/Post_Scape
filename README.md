@@ -2,6 +2,7 @@
 
 PostScape, a platform for publishing articles and engaging with readers. It leverages modern technologies such as React for the frontend, Cloudflare Workers for the backend, and various other tools and libraries to create a seamless user experience.
 
+---
 
 ## Technologies Used
 
@@ -12,6 +13,7 @@ PostScape, a platform for publishing articles and engaging with readers. It leve
 - **ORM**: Prisma  
 - **Database**: PostgreSQL  
 - **Authentication**: JSON Web Tokens (JWT)  
+- **AI Integration**: Gemini API  
 
 ---
 
@@ -20,8 +22,13 @@ PostScape, a platform for publishing articles and engaging with readers. It leve
 - **User Authentication**: Secure user authentication using JWT tokens.   
 - **Blogging Experience**: Write and publish blogs.   
 - **Publish Control**: Articles can only be published when ready.  
-- **AI-Powered Blog Generation**: Users can generate blog content using AI for inspiration or quick drafts.  
-- **Grammar Check**: Ensure blog quality by running a grammar check on the content.  
+- **AI-Powered Blog Generation**: Users can generate blog content using AI for inspiration or quick drafts by leveraging the Gemini API.   
+- **Grammar Check**: Ensure blog quality by running a grammar check on the content using AI.   
+
+### AI Features
+
+1. **AI-Generated Posts**: Users can generate a blog post draft based on the title provided in the title box by clicking the "Generate with AI" button.  
+2. **Grammar Correction**: Users can make their posts grammatically correct by clicking the "Grammar Check" button, ensuring polished and professional content.  
 
 ---
 
@@ -52,7 +59,4 @@ To get started with this project, follow these steps:
 3. Configure your PostgreSQL database and update the connection settings in the Prisma configuration file.  
 4. Run database migrations using `npx prisma migrate dev`.  
 5. Start the frontend and backend servers using `npm run dev`.
-
----
-
 
